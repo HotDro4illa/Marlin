@@ -56,9 +56,9 @@
  * nozzle from crashing into the build surface. These values can be changed
  * in the Marlin UI so ballpark values are fine.
 */
-#define X_PROBE_OFFSET 27     // GR
-#define Y_PROBE_OFFSET -7     // GR
-#define Z_PROBE_OFFSET -1.40  // GR Sulla mia KP5L Z-Offset -1.40
+#define X_PROBE_OFFSET 24
+#define Y_PROBE_OFFSET 1
+#define Z_PROBE_OFFSET -2.80
 
 //===========================================================================
 //============================= Getting Started =============================
@@ -84,7 +84,7 @@
 // @section info
 
 // Author info of this build printed to the host during boot and M115
-#define STRING_CONFIG_H_AUTHOR "Mechano" // Who made the changes.  // GR
+#define STRING_CONFIG_H_AUTHOR "Mechano" // Who made the changes.
 //#define CUSTOM_VERSION_FILE Version.h // Path from the root directory (no quotes)
 
 // @section machine
@@ -148,7 +148,7 @@
 //#define BLUETOOTH
 
 // Name displayed in the LCD "Ready" message and Info menu
-#define CUSTOM_MACHINE_NAME "KP5M"
+#define CUSTOM_MACHINE_NAME "KP3S"
 
 // Printer's unique ID, used by some programs to differentiate between machines.
 // Choose your own or use a service like https://www.uuidgenerator.net/version4
@@ -576,7 +576,7 @@
  *   998 : Dummy Table that ALWAYS reads 25°C or the temperature defined below.
  *   999 : Dummy Table that ALWAYS reads 100°C or the temperature defined below.
  */
-#define TEMP_SENSOR_0 1
+#define TEMP_SENSOR_0 61
 #define TEMP_SENSOR_1 0
 #define TEMP_SENSOR_2 0
 #define TEMP_SENSOR_3 0
@@ -660,7 +660,7 @@
 // Above this temperature the heater will be switched off.
 // This can protect components from overheating, but NOT from shorts and failures.
 // (Use MINTEMP for thermistor short/failure protection.)
-#define HEATER_0_MAXTEMP 305 // GR proviamo a raggiungere 290 gradi (vedi sotto) era 275
+#define HEATER_0_MAXTEMP 365  // GR raggiungiamo i 350 gradi
 #define HEATER_1_MAXTEMP 275
 #define HEATER_2_MAXTEMP 275
 #define HEATER_3_MAXTEMP 275
@@ -668,7 +668,7 @@
 #define HEATER_5_MAXTEMP 275
 #define HEATER_6_MAXTEMP 275
 #define HEATER_7_MAXTEMP 275
-#define BED_MAXTEMP      120 // GR letto a 110 gradi (vedi overshot)
+#define BED_MAXTEMP      120  // GR raggiungiamo i 110 gradi
 #define CHAMBER_MAXTEMP  60
 
 /**
@@ -677,8 +677,8 @@
  * (especially before PID tuning). Setting the target temperature too close to MAXTEMP guarantees
  * a MAXTEMP shutdown! Use these values to forbid temperatures being set too close to MAXTEMP.
  */
-#define HOTEND_OVERSHOOT 15   // (°C) Forbid temperatures over MAXTEMP - OVERSHOOT // GR era 15 proviamo a raggiungere 300 gradi
-#define BED_OVERSHOOT    10   // (°C) Forbid temperatures over MAXTEMP - OVERSHOOT
+#define HOTEND_OVERSHOOT 15   // (°C) Forbid temperatures over MAXTEMP - OVERSHOOT // GR necessario per i 350 gradi
+#define BED_OVERSHOOT    10   // (°C) Forbid temperatures over MAXTEMP - OVERSHOOT  // GR necessario per i 110 gradi
 #define COOLER_OVERSHOOT  2   // (°C) Forbid temperatures closer than OVERSHOOT
 
 //===========================================================================
@@ -694,8 +694,8 @@
  * PIDTEMP : PID temperature control (~4.1K)
  * MPCTEMP : Predictive Model temperature control. (~1.8K without auto-tune)
  */
-#define PIDTEMP           // See the PID Tuning Guide at https://reprap.org/wiki/PID_Tuning
-//#define MPCTEMP         // ** EXPERIMENTAL ** See https://marlinfw.org/docs/features/model_predictive_control.html
+//#define PIDTEMP           // See the PID Tuning Guide at https://reprap.org/wiki/PID_Tuning
+#define MPCTEMP         // ** EXPERIMENTAL ** See https://marlinfw.org/docs/features/model_predictive_control.html
 
 #define PID_MAX  255      // Limit hotend current while PID is active (see PID_FUNCTIONAL_RANGE below); 255=full current
 #define PID_K1     0.95   // Smoothing factor within any PID loop
@@ -712,9 +712,9 @@
         #define DEFAULT_Ki_LIST {   1.08,   1.08 }
         #define DEFAULT_Kd_LIST { 114.00, 114.00 }
     #else
-        #define DEFAULT_Kp  13.80   // GR
-        #define DEFAULT_Ki   0.84   // GR
-        #define DEFAULT_Kd  56.80   //GR
+        #define DEFAULT_Kp  13.50 // GR rilevati con Pronterface sulla mia stampante
+        #define DEFAULT_Ki   0.98 // GR rilevati con Pronterface sulla mia stampante
+        #define DEFAULT_Kd  46.5 // GR rilevati con Pronterface sulla mia stampante
     #endif
 #else
     #define BANG_MAX 255    // Limit hotend current while in bang-bang mode; 255=full current
@@ -739,11 +739,11 @@
     #define MPC_INCLUDE_FAN                             // Model the fan speed?
   
     // Measured physical constants from M306
-    #define MPC_BLOCK_HEAT_CAPACITY { 9.7f }           // (J/K) Heat block heat capacities. // GR
-    #define MPC_SENSOR_RESPONSIVENESS { 0.081f }         // (K/s per ∆K) Rate of change of sensor temperature from heat block. // GR
-    #define MPC_AMBIENT_XFER_COEFF { 0.050f }           // (W/K) Heat transfer coefficients from heat block to room air with fan off. // GR
+    #define MPC_BLOCK_HEAT_CAPACITY { 8.5f }           // (J/K) Heat block heat capacities. // GR era 16.7
+    #define MPC_SENSOR_RESPONSIVENESS { 0.070f }         // (K/s per ∆K) Rate of change of sensor temperature from heat block. // GR era 0.22
+    #define MPC_AMBIENT_XFER_COEFF { 0.046f }           // (W/K) Heat transfer coefficients from heat block to room air with fan off. // GR era 0.068 
     #if ENABLED(MPC_INCLUDE_FAN)
-        #define MPC_AMBIENT_XFER_COEFF_FAN255 { 0.091f }  // (W/K) Heat transfer coefficients from heat block to room air with fan on full. // GR
+        #define MPC_AMBIENT_XFER_COEFF_FAN255 { 0.066f }  // (W/K) Heat transfer coefficients from heat block to room air with fan on full. // GR era 0.097
     #endif
   
     // For one fan and multiple hotends MPC needs to know how to apply the fan cooling effect.
@@ -802,9 +802,9 @@
   
     // 120V 250W silicone heater into 4mm borosilicate (MendelMax 1.5+)
     // from FOPDT model - kp=.39 Tp=405 Tdead=66, Tc set to 79.2, aggressive factor of .15 (vs .1, 1, 10)
-    #define DEFAULT_bedKp 207.8   // GR
-    #define DEFAULT_bedKi 36.08   // GR
-    #define DEFAULT_bedKd 797.9   // GR
+    #define DEFAULT_bedKp 114.0
+    #define DEFAULT_bedKi 21.93
+    #define DEFAULT_bedKd 395.4
   
     // FIND YOUR OWN: "M303 E-1 C8 S90" to run autotune on the bed at 90 degreesC for 8 cycles.
 #else
@@ -1038,6 +1038,9 @@
         // Radius around the center where the arm cannot reach
         #define MIDDLE_DEAD_ZONE_R   0  // (mm)
     
+        #define THETA_HOMING_OFFSET  0  // Calculated from Calibration Guide and M360 / M114. See https://www.morgan3dp.com/morgan-calibration-guide/
+        #define PSI_HOMING_OFFSET    0  // Calculated from Calibration Guide and M364 / M114. See https://www.morgan3dp.com/morgan-calibration-guide/
+    
     #elif ENABLED(MP_SCARA)
     
         #define SCARA_OFFSET_THETA1  12 // degrees
@@ -1056,19 +1059,23 @@
     #define DEFAULT_SEGMENTS_PER_SECOND 200
   
     // Length of inner and outer support arms. Measure arm lengths precisely.
-    #define TPARA_LINKAGE_1 120     // (mm)
-    #define TPARA_LINKAGE_2 120     // (mm)
+    #define TPARA_LINKAGE_1 120       // (mm)
+    #define TPARA_LINKAGE_2 120       // (mm)
   
-    // TPARA tower offset (position of Tower relative to bed zero position)
-    // This needs to be reasonably accurate as it defines the printbed position in the TPARA space.
-    #define TPARA_OFFSET_X    0     // (mm)
-    #define TPARA_OFFSET_Y    0     // (mm)
-    #define TPARA_OFFSET_Z    0     // (mm)
+    // SCARA tower offset (position of Tower relative to bed zero position)
+    // This needs to be reasonably accurate as it defines the printbed position in the SCARA space.
+    #define TPARA_OFFSET_X    0       // (mm)
+    #define TPARA_OFFSET_Y    0       // (mm)
+    #define TPARA_OFFSET_Z    0       // (mm)
   
     #define FEEDRATE_SCALING        // Convert XY feedrate from mm/s to degrees/s on the fly
   
     // Radius around the center where the arm cannot reach
     #define MIDDLE_DEAD_ZONE_R   0  // (mm)
+  
+    // Calculated from Calibration Guide and M360 / M114. See https://www.morgan3dp.com/morgan-calibration-guide/
+    #define THETA_HOMING_OFFSET  0
+    #define PSI_HOMING_OFFSET    0
 #endif
 
 // @section polar
@@ -1289,7 +1296,7 @@
  * Override with M201
  *                                      X, Y, Z [, I [, J [, K...]]], E0 [, E1[, E2...]]
  */
-#define DEFAULT_MAX_ACCELERATION      { 2000, 2000, 100, 1000 }
+#define DEFAULT_MAX_ACCELERATION      { 1000, 1000, 100, 1000 }
 
 //#define LIMITED_MAX_ACCEL_EDITING     // Limit edit via M201 or LCD to DEFAULT_MAX_ACCELERATION * 2
 #if ENABLED(LIMITED_MAX_ACCEL_EDITING)
@@ -1342,7 +1349,7 @@
     #endif
 #endif
 
-#define DEFAULT_EJERK    15.0  // May be used by Linear Advance // GR Linear advance vuole almeno 10 era 5
+#define DEFAULT_EJERK    15.0  // May be used by Linear Advance	// GR era 5 Linear Advance vuole almeno 10
 
 /**
  * Junction Deviation Factor
@@ -1487,17 +1494,6 @@
 #if ENABLED(BD_SENSOR)
     //#define BD_SENSOR_PROBE_NO_STOP // Probe bed without stopping at each probe point
 #endif
-
-/**
- * BIQU MicroProbe
- *
- * A lightweight, solenoid-driven probe.
- * For information about this sensor https://github.com/bigtreetech/MicroProbe
- *
- * Also requires: PROBE_ENABLE_DISABLE
- */
-//#define BIQU_MICROPROBE_V1  // Triggers HIGH
-//#define BIQU_MICROPROBE_V2  // Triggers LOW
 
 // A probe that is deployed and stowed with a solenoid pin (SOL1_PIN)
 //#define SOLENOID_PROBE
@@ -1749,8 +1745,8 @@
 // Require minimum nozzle and/or bed temperature for probing
 //#define PREHEAT_BEFORE_PROBING
 #if ENABLED(PREHEAT_BEFORE_PROBING)
-    #define PROBING_NOZZLE_TEMP 210   // (°C) Only applies to E0 at this time
-    #define PROBING_BED_TEMP     60
+    #define PROBING_NOZZLE_TEMP 120   // (°C) Only applies to E0 at this time
+    #define PROBING_BED_TEMP     50
 #endif
 
 // For Inverting Stepper Enable Pins (Active Low) use 0, Non Inverting (Active High) use 1
@@ -1789,9 +1785,9 @@
 // @section motion
 
 // Invert the stepper direction. Change (or reverse the motor connector) if an axis goes the wrong way.
-#define INVERT_X_DIR false  // GR valori corretti per la KP5L
-#define INVERT_Y_DIR true   // GR valori corretti per la KP5L
-#define INVERT_Z_DIR false  // GR valori corretti per la KP5L
+#define INVERT_X_DIR false
+#define INVERT_Y_DIR false
+#define INVERT_Z_DIR true
 //#define INVERT_I_DIR false
 //#define INVERT_J_DIR false
 //#define INVERT_K_DIR false
@@ -1802,7 +1798,7 @@
 // @section extruder
 
 // For direct drive extruder v9 set to true, for geared extruder set to false.
-#define INVERT_E0_DIR false //KP5L invert E0
+#define INVERT_E0_DIR true
 #define INVERT_E1_DIR false
 #define INVERT_E2_DIR false
 #define INVERT_E3_DIR false
@@ -1861,16 +1857,16 @@
 // @section geometry
 
 // The size of the printable area
-#define X_BED_SIZE 230
-#define Y_BED_SIZE 230
+#define X_BED_SIZE 180
+#define Y_BED_SIZE 180
 
 // Travel limits (linear=mm, rotational=°) after homing, corresponding to endstop positions.
-#define X_MIN_POS 0
+#define X_MIN_POS -3
 #define Y_MIN_POS 0
 #define Z_MIN_POS 0
 #define X_MAX_POS X_BED_SIZE
 #define Y_MAX_POS Y_BED_SIZE
-#define Z_MAX_POS 250
+#define Z_MAX_POS 180
 //#define I_MIN_POS 0
 //#define I_MAX_POS 50
 //#define J_MIN_POS 0
@@ -1940,7 +1936,7 @@
  */
 #define FILAMENT_RUNOUT_SENSOR
 #if ENABLED(FILAMENT_RUNOUT_SENSOR)
-    #define FIL_RUNOUT_ENABLED_DEFAULT true // Enable the sensor on startup. Override with M412 followed by M500.
+    #define FIL_RUNOUT_ENABLED_DEFAULT false // Enable the sensor on startup. Override with M412 followed by M500.
     #define NUM_RUNOUT_SENSORS   1          // Number of sensors, up to one per extruder. Define a FIL_RUNOUT#_PIN for each.
   
     #define FIL_RUNOUT_STATE     LOW        // Pin state indicating that filament is NOT present.
@@ -2092,7 +2088,7 @@
  * Commands to execute at the end of G29 probing.
  * Useful to retract or move the Z probe out of the way.
  */
-//#define EVENT_GCODE_AFTER_G29 "G1 Z10 F12000\nG1 X15 Y330\nG1 Z0.5\nG1 Z10"
+//#define Z_PROBE_END_SCRIPT "G1 Z10 F12000\nG1 X15 Y330\nG1 Z0.5\nG1 Z10"
 
 /**
  * Normally G28 leaves leveling disabled on completion. Enable one of
@@ -2114,7 +2110,7 @@
 /**
  * Enable detailed logging of G28, G29, M48, etc.
  * Turn on with the command 'M111 S32'.
- * NOTE: Requires a lot of PROGMEM!
+ * NOTE: Requires a lot of flash!
  */
 //#define DEBUG_LEVELING_FEATURE
 
@@ -2167,7 +2163,7 @@
 #if ANY(AUTO_BED_LEVELING_LINEAR, AUTO_BED_LEVELING_BILINEAR)
   
     // Set the number of grid points per dimension.
-    #define GRID_MAX_POINTS_X 5
+    #define GRID_MAX_POINTS_X 3
     #define GRID_MAX_POINTS_Y GRID_MAX_POINTS_X
   
     // Probe along the Y axis, advancing X after each column
@@ -2242,7 +2238,7 @@
     //===========================================================================
   
     #define MESH_INSET 10          // Set Mesh bounds as an inset region of the bed
-    #define GRID_MAX_POINTS_X 4    // Don't use more than 7 points per axis, implementation limited. // GR 4x4 punti di calibrazione manuale
+    #define GRID_MAX_POINTS_X 4    // Don't use more than 7 points per axis, implementation limited. // GR 4 punti di calibrazione manuale
     #define GRID_MAX_POINTS_Y GRID_MAX_POINTS_X
   
     //#define MESH_G28_REST_ORIGIN // After homing all axes ('G28' or 'G28 XYZ') rest Z at Z_MIN_POS
@@ -2258,18 +2254,18 @@
 #if ENABLED(LCD_BED_LEVELING)
     #define MESH_EDIT_Z_STEP  0.025 // (mm) Step size while manually probing Z axis.
     #define LCD_PROBE_Z_RANGE 4     // (mm) Z Range centered on Z_MIN_POS for LCD Z adjustment
-    #define MESH_EDIT_MENU        // Add a menu to edit mesh points // GR Menu per editare la mesh
+    #define MESH_EDIT_MENU        // Add a menu to edit mesh points
 #endif
 
 // Add a menu item to move between bed corners for manual bed adjustment
 #define LCD_BED_TRAMMING
 
 #if ENABLED(LCD_BED_TRAMMING)
-    #define BED_TRAMMING_INSET_LFRB { 40, 40, 40, 40 } // (mm) Left, Front, Right, Back insets
+    #define BED_TRAMMING_INSET_LFRB { 30, 30, 30, 30 } // (mm) Left, Front, Right, Back insets
     #define BED_TRAMMING_HEIGHT      0.0        // (mm) Z height of nozzle at tramming points
     #define BED_TRAMMING_Z_HOP       4.0        // (mm) Z height of nozzle between tramming points
     #define BED_TRAMMING_INCLUDE_CENTER         // Move to the center after the last corner
-    //#define BED_TRAMMING_USE_PROBE  // GR proviamo a fargli usare 3D Touch per il tramming assistito
+    //#define BED_TRAMMING_USE_PROBE
     #if ENABLED(BED_TRAMMING_USE_PROBE)
         #define BED_TRAMMING_PROBE_TOLERANCE 0.1  // (mm)
         #define BED_TRAMMING_VERIFY_RAISED        // After adjustment triggers the probe, re-probe to verify
@@ -2455,7 +2451,7 @@
 
 #define PREHEAT_2_LABEL       "PETG"
 #define PREHEAT_2_TEMP_HOTEND 235
-#define PREHEAT_2_TEMP_BED     75
+#define PREHEAT_2_TEMP_BED     80
 #define PREHEAT_2_TEMP_CHAMBER 35
 #define PREHEAT_2_FAN_SPEED     0 // Value from 0 to 255
 
@@ -3090,7 +3086,7 @@
 
 //
 // Factory display for Creality CR-10 / CR-7 / Ender-3
-// https://marlinfw.org/docs/hardware/controllers.html#cr10_stockdisplay
+// https://www.aliexpress.com/item/32833148327.html
 //
 // Connect to EXP1 on RAMPS and compatible boards.
 //
@@ -3452,7 +3448,7 @@
  *   TFT_ROTATE_270, TFT_ROTATE_270_MIRROR_X, TFT_ROTATE_270_MIRROR_Y,
  *   TFT_MIRROR_X, TFT_MIRROR_Y, TFT_NO_ROTATION
  */
-#define TFT_ROTATION TFT_ROTATE_270 // GR TFT_ROTATE_270 per portrait TFT_NO_ROTATION H connettore a dx, TFT_ROTATE_180 H connettore sx
+#define TFT_ROTATION TFT_ROTATE_270
 
 //=============================================================================
 //============================  Other Controllers  ============================
@@ -3476,6 +3472,7 @@
     #define BUTTON_DELAY_MENU     250 // (ms) Button repeat delay for menus
   
     //#define DISABLE_ENCODER         // Disable the click encoder, if any
+    //#define TOUCH_IDLE_SLEEP_MINS 5 // (minutes) Display Sleep after a period of inactivity. Set with M255 S.
   
     #define TOUCH_SCREEN_CALIBRATION 
   
